@@ -22,10 +22,10 @@ const MusicPlayer = () => {
 
 	const audio = new Audio(songUrl);
 
+	/* to-do funzione pausa non funzionante  */
 	const playSong = () => {
 		if (isPlaying) {
 			audio.pause();
-			audio.currentTime = 0; // Set currentTime to the beginning to stop playback
 		} else {
 			audio.play();
 		}
@@ -49,8 +49,8 @@ const MusicPlayer = () => {
 								<a href="/">
 									<img src={prevIcon} alt="prev" />
 								</a>
-								<a>
-									<img onClick={playSong} src={playIcon} alt="play" />
+								<a onClick={playSong}>
+									<img src={playIcon} alt="play" />
 								</a>
 								<a href="/">
 									<img src={nextIcon} alt="next" />
