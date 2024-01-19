@@ -1,9 +1,34 @@
 // Sidebar.js
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo/logo.png";
 import { Container, Navbar, Nav, Form, FormControl, Button, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { queryResult } from "../redux/actions/actions";
+import store from "../redux/store/store";
 
 const Sidebar = () => {
+	const dispatch = useDispatch();
+	const [searchQuery, setSearchQuery] = useState("");
+
+	const handleSearchSubmit = (event) => {
+		event.preventDefault();
+
+		// Use the searchQuery to construct the URL and perform the fetch operation
+		const searchUrl = `https://striveschool-api.herokuapp.com/api/deezer/search?q=${searchQuery}`;
+
+		fetchQuery(searchUrl);
+	};
+	const fetchQuery = async (url) => {
+		try {
+			const response = await fetch(url);
+			const dataQuery = await response.json();
+			console.log(dataQuery);
+			await dispatch(queryResult(dataQuery));
+			console.log(store.getState());
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<Col xs={2}>
 			<Navbar className="navbar-expand-md fixed-left justify-content-between" id="sidebar">
@@ -26,13 +51,14 @@ const Sidebar = () => {
 									</Nav.Link>
 								</li>
 								<li>
-									<Form className="input-group mt-3">
+									<Form className="input-group mt-3" onSubmit={handleSearchSubmit}>
 										<FormControl
 											type="text"
 											id="searchField"
 											placeholder="Search"
 											aria-label="Search"
 											aria-describedby="basic-addon2"
+											onChange={(e) => setSearchQuery(e.target.value)}
 										/>
 										<Button variant="outline-secondary" size="sm" type="submit">
 											GO

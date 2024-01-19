@@ -1,17 +1,24 @@
 // MainContent.js
-import React from "react";
+import React, { useEffect } from "react";
 import MainLinks from "./MainLinks";
 import Section from "./Section";
 import { Col } from "react-bootstrap";
+import SearchContent from "./SearchResults";
+import { useSelector } from "react-redux";
 
 function MainContent() {
+	const data = useSelector((state) => state.queryReducer);
+	useEffect(() => {
+		console.log(data);
+	}, [data]);
+
 	return (
-		<Col sm={12} md={8} className="offset-md-3 mainPage">
+		<Col sm={12} md={8} className="offset-md-3 mainPage pb-5">
 			<MainLinks />
-			<Section title="Search Results" id="searchResults" />
-			<Section title="Rock Classics" id="rock" />
-			<Section title="Pop Culture" id="pop" />
-			<Section title="#HipHop" id="hiphop" />
+			{data.data.length > 1 ? <SearchContent title="Search results" /> : null}
+			<Section title="Rock Classics" id="rock" search="queen" />
+			<Section title="Pop Culture" id="pop" search="katy perry" />
+			<Section title="#HipHop" id="hiphop" search="eminem" />
 		</Col>
 	);
 }
